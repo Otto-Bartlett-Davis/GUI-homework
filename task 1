@@ -1,0 +1,12 @@
+from tkinter import *
+
+root = Tk()
+root.title("4 Buttons Example")
+root.geometry("400x400")
+
+Button(root, text="Top", bg="lightblue").pack(side=TOP, fill=X)
+Button(root, text="Bottom", bg="lightgreen").pack(side=BOTTOM, fill=X)
+Button(root, text="Left", bg="lightyellow").pack(side=LEFT, fill=Y)
+Button(root, text="Right", bg="lightpink").pack(side=RIGHT, fill=Y)
+
+root.mainloop()
