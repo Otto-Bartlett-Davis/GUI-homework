@@ -1,0 +1,67 @@
+from tkinter import *
+from tkinter import scrolledtext, messagebox
+import os
+
+def save_code_to_file():
+    project_name = project_entry.get().strip()
+    if not project_name:
+        messagebox.showwarning("Invalid Name", "Please enter a valid project name.")
+        return
+    
+    folder_name = "lesson 1"
+    if not os.path.exists(folder_name):  
+        os.makedirs(folder_name)
+    
+    file_path = os.path.join(folder_name, f"{project_name}.py")
+    
+    code = code_editor.get("1.0", END).strip()
+    if code:  
+        try:
+            with open(file_path, "w") as file:
+                file.write(code)
+            messagebox.showinfo("Save Successful", f"Your code has been saved to {file_path}")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to save code: {str(e)}")
+    else:
+        messagebox.showwarning("Empty Code", "The code editor is empty. Nothing to save.")
+
+def execute_code():
+    code = code_editor.get("1.0", END)
+    try:
+        exec_locals = {}
+        exec(code, globals(), exec_locals)
+        output_box.delete("1.0", END)
+        if "_result" in exec_locals:
+            output_box.insert(END, f"{exec_locals['_result']}\n")
+    except Exception as e:
+        output_box.delete("1.0", END)
+        output_box.insert(END, f"Error: {str(e)}\n")
+
+root = Tk()
+root.title("Repl.it-like Python Interpreter")
+root.geometry("800x600")
+root.configure(bg="lightgray")
+
+Label(root, text="Pick a template:", font=("Arial", 14), bg="lightgray").pack(pady=5, anchor=W)
+template_entry = Entry(root, font=("Arial", 12), width=50)
+template_entry.insert(0, "Python")
+template_entry.pack(pady=5, anchor=W)
+
+Label(root, text="Name your project:", font=("Arial", 14), bg="lightgray").pack(pady=5, anchor=W)
+project_entry = Entry(root, font=("Arial", 12), width=50)
+project_entry.insert(0, "My Python Project")
+project_entry.pack(pady=5, anchor=W)
+
+Button(root, text="Create repl", font=("Arial", 12), bg="green", fg="white", command=save_code_to_file).pack(pady=10)
+
+Label(root, text="Code Editor:", font=("Arial", 14), bg="lightgray").pack(pady=5, anchor=W)
+code_editor = scrolledtext.ScrolledText(root, font=("Courier New", 12), height=15, width=70)
+code_editor.pack(pady=5)
+
+Button(root, text="Run", font=("Arial", 12), bg="blue", fg="white", command=execute_code).pack(pady=10)
+
+Label(root, text="Output:", font=("Arial", 14), bg="lightgray").pack(pady=5, anchor=W)
+output_box = scrolledtext.ScrolledText(root, font=("Courier New", 12), height=10, width=70, bg="black", fg="white")
+output_box.pack(pady=5)
+
+root.mainloop()
