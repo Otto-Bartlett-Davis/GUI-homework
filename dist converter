@@ -1,0 +1,35 @@
+from tkinter import *
+
+def calculate_distance():
+    try:
+        time = float(time_entry.get())
+        speed = float(speed_entry.get())
+        distance = time * speed
+        result_label.config(text=f"Distance Covered: {distance} km")
+    except ValueError:
+        result_label.config(text="Please enter valid numbers!")
+
+# Create main window
+root = Tk()
+root.title("Distance Calculator")
+root.geometry("300x200")
+
+# Time input
+Label(root, text="Time (hours):").pack(pady=5)
+time_entry = Entry(root)
+time_entry.pack(pady=5)
+
+# Speed input
+Label(root, text="Speed (km/hr):").pack(pady=5)
+speed_entry = Entry(root)
+speed_entry.pack(pady=5)
+
+# Calculate button
+Button(root, text="Calculate Distance", command=calculate_distance).pack(pady=10)
+
+# Result label
+result_label = Label(root, text="")
+result_label.pack(pady=5)
+
+# Run the application
+root.mainloop()
