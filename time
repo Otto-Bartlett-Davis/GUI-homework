@@ -1,0 +1,21 @@
+from tkinter import Tk, Label
+import time
+
+def update_clock():
+    current_time = time.strftime('%I:%M:%S %p')  # 12-hour format with AM/PM
+    label.config(text=current_time)
+    label.after(1000, update_clock)  # Update every second
+
+# Create the main window
+root = Tk()
+root.title("Clock")
+root.geometry("400x100")  # Adjust window size
+root.configure(bg='#FFA500')  # Orange background
+
+# Create a label for displaying time
+label = Label(root, font=('Arial', 40, 'bold'), fg='white', bg='#FFA500')
+label.pack(expand=True)
+
+update_clock()  # Start the clock update loop
+
+root.mainloop()
