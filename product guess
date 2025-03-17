@@ -1,0 +1,47 @@
+import random
+from tkinter import messagebox, Tk, Label, Entry, Button
+
+# Initialise the Tkinter window
+root = Tk()
+root.title("Guess the Product Game")
+root.geometry("400x400")
+
+# Generate two random numbers
+num1 = random.randint(1, 10)  # First number (will be shown)
+num2 = random.randint(1, 10)  # Second number (hidden)
+product = num1 * num2  # The product to be guessed
+
+# Inform the user about one of the numbers
+messagebox.showinfo("Hint", f"One of the numbers is: {num1}")
+
+def start():
+    name = text_name.get()
+    messagebox.showinfo("Welcome", f"Hey {name}, try to guess the product of two numbers!")
+
+def num_check():
+    try:
+        guess = int(text_guess.get())
+        if guess > product:
+            messagebox.showinfo("Too High", "Your guess is too high!")
+        elif guess < product:
+            messagebox.showinfo("Too Low", "Your guess is too low!")
+        else:
+            messagebox.showinfo("Correct!", "Well done! You guessed correctly.")
+            root.quit()  # Quit the application when guessed correctly
+    except ValueError:
+        messagebox.showerror("Error", "Please enter a valid number.")
+
+# UI Elements
+Label(root, text="Guess the Product Game").grid(row=0, column=1)
+Label(root, text="Enter your name:").grid(row=1, column=0)
+text_name = Entry(root)
+text_name.grid(row=1, column=1)
+Button(root, text="Start", command=start).grid(row=1, column=2)
+
+Label(root, text="Enter your guess:").grid(row=2, column=0)
+text_guess = Entry(root)
+text_guess.grid(row=2, column=1)
+Button(root, text="Guess!", command=num_check).grid(row=2, column=2)
+
+# Start the main loop
+root.mainloop()
