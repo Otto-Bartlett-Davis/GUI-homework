@@ -1,0 +1,50 @@
+from tkinter import *
+
+root = Tk()
+root.title("Pizza App")
+root.geometry("400x250")
+
+pizza_var = StringVar(value="Veg Extravaganza")
+quantity_var = StringVar(value="1")
+size_var = StringVar(value="S")
+result_var = StringVar()
+
+Label(root, text="Welcome to Pizza Hut").pack(pady=5)
+
+Label(root, text="Select Your Fav Pizza:").pack()
+pizza_menu = OptionMenu(root, pizza_var, "Veg Extravaganza", "Pepperoni", "Margherita", "Farmhouse")
+pizza_menu.pack()
+
+Label(root, text="Enter Quantity:").pack()
+quantity_menu = OptionMenu(root, quantity_var, *[str(i) for i in range(1, 11)])
+quantity_menu.pack()
+
+Label(root, text="Choose Size:").pack()
+
+size_frame = Frame(root)
+size_frame.pack()
+sizes = [("S", "Small"), ("M", "Medium"), ("L", "Large")]
+for val, label in sizes:
+    Radiobutton(size_frame, text=val, variable=size_var, value=val).pack(side=LEFT)
+
+def place_order():
+    pizza = pizza_var.get()
+    qty = quantity_var.get()
+    size_code = size_var.get()
+    size_text = {"S": "Small", "M": "Medium", "L": "Large"}[size_code]
+
+    result = f"You ordered {qty} {pizza} {size_text} Size Pizza(s)"
+    result_var.set(result)
+
+    order_btn.config(state=DISABLED)
+    pizza_menu.config(state=DISABLED)
+    quantity_menu.config(state=DISABLED)
+    for child in size_frame.winfo_children():
+        child.config(state=DISABLED)
+
+order_btn = Button(root, text="Order", command=place_order)
+order_btn.pack(pady=10)
+
+Label(root, textvariable=result_var, fg="red").pack(pady=5)
+
+root.mainloop()
