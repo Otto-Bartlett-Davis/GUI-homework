@@ -1,0 +1,53 @@
+from tkinter import *
+from tkinter import messagebox
+import time
+
+root = Tk()
+root.title("Stopwatch")
+root.configure(bg="grey")
+
+h = StringVar()
+m = StringVar()
+s = StringVar()
+
+hours = Entry(root, textvariable=h, width=3)
+hours.grid(row=2, column=1)
+minutes = Entry(root, textvariable=m, width=3)
+minutes.grid(row=2, column=3)
+seconds = Entry(root, textvariable=s, width=3)
+seconds.grid(row=2, column=5)
+
+start_btn = Button(text="Start")
+start_btn.grid(row=3, column=1)
+
+def counter():
+    try:
+        t = int(h.get()) * 3600 + int(m.get()) * 60 + int(s.get())
+    except:
+        messagebox.showerror("Error", "Please enter valid numbers.")
+        return
+
+    start_btn.config(state=DISABLED)
+    hours.config(state=DISABLED)
+    minutes.config(state=DISABLED)
+    seconds.config(state=DISABLED)
+
+    while t > -1:
+        mins, secs = divmod(t, 60)
+        hrs, mins = divmod(mins, 60)
+
+        h.set("{00:02d}".format(hrs))
+        m.set("{00:02d}".format(mins))
+        s.set("{00:02d}".format(secs))
+
+        root.update()
+        time.sleep(1)
+
+        if t == 0:
+            messagebox.showinfo("Time Countdown", "Time's up!")
+
+        t -= 1
+
+start_btn.config(command=counter)
+
+root.mainloop()
