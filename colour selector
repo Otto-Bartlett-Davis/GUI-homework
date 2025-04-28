@@ -1,0 +1,47 @@
+import tkinter as tk
+from tkinter import simpledialog, messagebox
+
+def change_background(event):
+    selected = listbox.curselection()
+    if selected:
+        colour = listbox.get(selected[0])
+        try:
+            root.configure(bg=colour)
+        except tk.TclError:
+            messagebox.showerror("Error", f"'{colour}' is not a valid colour name.")
+
+def add_colour():
+    colour = simpledialog.askstring("Add Colour", "Enter colour name:")
+    if colour:
+        listbox.insert(tk.END, colour)
+
+def remove_colour():
+    selected = listbox.curselection()
+    if selected:
+        listbox.delete(selected[0])
+
+root = tk.Tk()
+root.title("Colour Selector App")
+root.geometry("400x300")
+
+listbox = tk.Listbox(root)
+listbox.pack(pady=20)
+
+# Initial colours
+colours = ["red", "green", "blue", "yellow", "pink", "cyan"]
+for colour in colours:
+    listbox.insert(tk.END, colour)
+
+listbox.bind("<<ListboxSelect>>", change_background)
+
+# Buttons to add or remove colours
+button_frame = tk.Frame(root)
+button_frame.pack(pady=10)
+
+add_button = tk.Button(button_frame, text="Add Colour", command=add_colour)
+add_button.pack(side=tk.LEFT, padx=5)
+
+remove_button = tk.Button(button_frame, text="Remove Colour", command=remove_colour)
+remove_button.pack(side=tk.LEFT, padx=5)
+
+root.mainloop()
