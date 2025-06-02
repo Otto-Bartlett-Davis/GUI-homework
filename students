@@ -1,0 +1,96 @@
+from tkinter import *
+from tkinter.filedialog import *
+
+student_data = {}
+
+def update_add():
+    name = name_entry.get()
+    roll = roll_entry.get()
+    science = science_entry.get()
+    maths = maths_entry.get()
+
+    try:
+        science = float(science)
+        maths = float(maths)
+        percentage = (science + maths) / 2
+        percentage_entry.delete(0, END)
+        percentage_entry.insert(0, f"{percentage:.2f}")
+    except ValueError:
+        percentage_entry.delete(0, END)
+        percentage_entry.insert(0, "Invalid Marks")
+        return
+
+    student_data[roll] = {
+        "Name": name,
+        "Science": science,
+        "Maths": maths,
+        "Percentage": percentage
+    }
+
+    refresh_display()
+
+def refresh_display():
+    display_box.delete("1.0", END)
+    for roll, info in student_data.items():
+        display_box.insert(END, f"{roll}: {info}\n")
+
+def delete_entry():
+    roll = roll_entry.get()
+    if roll in student_data:
+        del student_data[roll]
+        refresh_display()
+
+def edit_entry():
+    roll = roll_entry.get()
+    if roll in student_data:
+        data = student_data[roll]
+        name_entry.delete(0, END)
+        name_entry.insert(0, data["Name"])
+        science_entry.delete(0, END)
+        science_entry.insert(0, data["Science"])
+        maths_entry.delete(0, END)
+        maths_entry.insert(0, data["Maths"])
+        percentage_entry.delete(0, END)
+        percentage_entry.insert(0, f"{data['Percentage']:.2f}")
+
+def save_data():
+    output = asksaveasfile(defaultextension=".txt")
+    if output is not None:
+        for i in student_data.get(0, END):
+            print(i.strip(), file=output)
+
+root = Tk()
+root.title("STUDENT INFORMATION AND MARKS LOGGER")
+
+Label(root, text="STUDENT REPORT LOG", font=("Arial", 10, "bold")).grid(row=0, column=0, columnspan=4, pady=5)
+
+Label(root, text="Name:").grid(row=1, column=0, sticky=E)
+name_entry = Entry(root)
+name_entry.grid(row=1, column=1)
+
+Label(root, text="RollNumber:").grid(row=2, column=0, sticky=E)
+roll_entry = Entry(root)
+roll_entry.grid(row=2, column=1)
+
+Label(root, text="Science_Marks:").grid(row=1, column=2, sticky=E)
+science_entry = Entry(root)
+science_entry.grid(row=1, column=3)
+
+Label(root, text="Maths_Marks:").grid(row=2, column=2, sticky=E)
+maths_entry = Entry(root)
+maths_entry.grid(row=2, column=3)
+
+Label(root, text="Percentage:").grid(row=3, column=2, sticky=E)
+percentage_entry = Entry(root)
+percentage_entry.grid(row=3, column=3)
+
+display_box = Text(root, height=10, width=65, bg="lightblue")
+display_box.grid(row=4, column=0, columnspan=4, pady=5)
+
+Button(root, text="Edit", command=edit_entry).grid(row=5, column=0, padx=5, pady=5)
+Button(root, text="Delete", command=delete_entry).grid(row=5, column=1, padx=5, pady=5)
+Button(root, text="Open").grid(row=5, column=2, padx=5, pady=5)
+Button(root, text="Update/Add", command=update_add).grid(row=5, column=3, padx=5, pady=5)
+Button(root, text="Save", command=save_data).grid(row=5, column=4, padx=5, pady=5)
+
+root.mainloop()
